@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <title>Kolikon Heitto</title>
+    </head>
+    <body>
+        <h1>Kolikon Heitto</h1>
+        <section>
+            <form>
+                <label for="rounds">Pelikierrosten lukumäärä:</label>
+                <input type="number" id="rounds" min="1"></input>
+                <input type="button" id="play" value="Pelaa!"/>
+            </form>
+        </section>
+        <section id="heitto-result">
+        </section>
+        <script>
+
+            const roundsInput = document.querySelector('input#rounds');
+
+            const button = document.querySelector('input#play');
+            button.addEventListener('click', run);
+
+            const output = document.querySelector('section#heitto-result');
+
+            function playRound() {
+                var n = 0;
+                var val = 0;
+                while (val != 1) {
+                    val = Math.floor(Math.random() * Math.floor(2));
+                    n++;
+                }
+                return n;
+            }
+
+            function run() {
+                button.disabled = true;
+                roundsInput.disabled = true;
+
+                setTimeout(() => {
+
+                    const rounds = roundsInput.value;
+                    output.innerHTML += `<hr><p>Pelataan <strong>${rounds}</strong> kierrosta..</p>`;
+
+                    var maxWin = 0;
+                    var avgWin = 0;
+                    var maxN = 0;
+
+                    for (var i = 0; i < rounds; i++) {
+                        const n = playRound();
+                        const win = 2**n;
+                        if (win > maxWin) {
+                            maxWin = win;
+                            maxN = n;
+                        }
+                        avgWin += win;
+                    }
+                    avgWin /= rounds;
+
+                    output.innerHTML += `<p>Maksimivoitto: <strong>${maxWin}</strong> euroa (${maxN} heittoa)`
+                    output.innerHTML += `<p>Keskivoitto: <strong>${avgWin}</strong> euroa`
+
+                    button.disabled = false;
+                    roundsInput.disabled = false;
+
+                }, 0);
+            }
+        </script>
+    </body>
+</html>
